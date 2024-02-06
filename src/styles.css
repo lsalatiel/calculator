@@ -1,0 +1,10 @@
+* {
+    background: #2A2A2A;
+}
+
+#title {
+    font-size: 50px;
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
