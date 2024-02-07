@@ -22,14 +22,59 @@ display.textContent = "0";
 
 function operate(a, b, operation) {
     switch (operation) {
-        case 1:
+        case "+":
             return sum(a, b);
-        case 2:
+        case "-":
             return sub(a, b);
-        case 3:
+        case "*":
             return mul(a, b);
-        case 4:
+        case "/":
             return div(a, b);
+    }
+}
+
+function operateDisplayValue(displayValue) {
+    if(displayValue[displayValue.length - 1] === "+" || displayValue[displayValue.length - 1] === "-" ||
+    displayValue[displayValue.length - 1] === "*" || displayValue[displayValue.length - 1] === "/") {
+        displayValue = displayValue.slice(0, displayValue.length - 1);
+    }
+
+    let i = 0;
+    let firstNumberStr = "";
+    let firstNumber = 0;
+    for(i = 0; i < displayValue.length; i++) {
+        if(i != 0 && (displayValue[i] === "+" || displayValue[i] === "-" || displayValue[i] === "*" ||
+            displayValue[i] === "/")) {
+            break;
+        }
+        firstNumberStr += displayValue[i];
+    }
+
+    if(i === displayValue.length)
+        return displayValue;
+
+    firstNumber = parseInt(firstNumberStr);
+
+    while(true) {
+        operator = displayValue[i];
+
+        let secondNumberStr = "";
+        let secondNumber = 0;
+        for(i = i + 1; i < displayValue.length; i++) {
+            if(displayValue[i] === "+" || displayValue[i] === "-" || displayValue[i] === "*" ||
+                displayValue[i] === "/") {
+                break;
+            }
+            secondNumberStr += displayValue[i];
+        }
+
+        secondNumber = parseInt(secondNumberStr);
+
+        let result = operate(firstNumber, secondNumber, operator);
+        firstNumber = result;
+
+        if(i === displayValue.length)
+            return result;
     }
 }
 
@@ -41,17 +86,11 @@ for(let i = 0; i < 10; i++) {
     calculatorButtons.appendChild(button);
     
     button.addEventListener("click", () => {
-        if(firstNumber === undefined)
-            firstNumber = i;
-        else
-            secondNumber = i;
-
         displayValue += i;
         if(display.textContent === "0")
             display.textContent = i;
         else
             display.textContent += i;
-        console.log(displayValue);
     });
 }
 
@@ -74,7 +113,6 @@ for(let i = 1; i < 5; i++) {
     button.classList.add("calculator-button");
     calculatorButtons.appendChild(button);
     button.addEventListener("click", () => {
-        operator = i;
         if(displayValue !== "" && displayValue[displayValue.length - 1] !== "+" &&
         displayValue[displayValue.length - 1] !== "-" && displayValue[displayValue.length - 1] !== "*" &&
         displayValue[displayValue.length - 1] !== "/") {
@@ -88,7 +126,6 @@ for(let i = 1; i < 5; i++) {
             displayValue = displayValue.slice(0, displayValue.length - 1) + button.textContent;
             display.textContent = displayValue;
         }
-        console.log(displayValue);
     });
 }
 
@@ -96,13 +133,16 @@ let equalsButton = document.createElement("button");
 equalsButton.textContent = "=";
 equalsButton.classList.add("calculator-button");
 calculatorButtons.appendChild(equalsButton);
+equalsButton.addEventListener("click", () => {
+    display.textContent = operateDisplayValue(displayValue);
+    displayValue = display.textContent;
+});
 
 let clearButton = document.createElement("button");
 clearButton.textContent = "C";
 clearButton.classList.add("calculator-button");
 calculatorButtons.appendChild(clearButton);
 clearButton.addEventListener("click", () => {
-    firstNumber = secondNumber = operator = undefined;
     display.textContent = "0";
     displayValue = '';
 });
@@ -121,4 +161,3 @@ buttons.forEach((button) => {
     });
 });
 
-console.log(displayValue);
