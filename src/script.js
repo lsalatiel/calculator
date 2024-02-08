@@ -120,7 +120,7 @@ for(let i = 1; i < 5; i++) {
             display.textContent = displayValue;
         }
         else if((displayValue === "" && button.textContent === "-") || ((displayValue !== ""
-        && displayValue[displayValue.length - 1] !== button.textContent) &&
+        && displayValue !== "-" && displayValue[displayValue.length - 1] !== button.textContent) &&
         (displayValue[displayValue.length - 1] === "+" || displayValue[displayValue.length - 1] === "-" ||
         displayValue[displayValue.length - 1] === "*" || displayValue[displayValue.length - 1] === "/"))) {
             displayValue = displayValue.slice(0, displayValue.length - 1) + button.textContent;
@@ -147,6 +147,17 @@ clearButton.addEventListener("click", () => {
     displayValue = '';
 });
 
+let backspaceButton = document.createElement("button");
+backspaceButton.textContent = "←";
+backspaceButton.classList.add("calculator-button");
+calculatorButtons.appendChild(backspaceButton);
+backspaceButton.addEventListener("click", () => {
+    displayValue = displayValue.slice(0, displayValue.length - 1);
+    if(displayValue === "")
+        display.textContent = "0";
+    else
+        display.textContent = displayValue;
+});
 
 const buttons = document.querySelectorAll('.calculator-button');
 buttons.forEach((button) => {
